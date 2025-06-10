@@ -182,13 +182,14 @@ export const footerLinks = [
 export const features = [
   {
     icon: delivery_truck_icon,
-    title: "Fastest Delivery",
-    description: "Groceries delivered in under 30 minutes.",
+   
+     title: "Freshness Guaranteed",
+    description: "Fresh produce straight from the source.",
   },
   {
     icon: leaf_icon,
-    title: "Freshness Guaranteed",
-    description: "Fresh produce straight from the source.",
+    title: "Fastest Delivery",
+    description: "Groceries delivered in under 30 minutes.",
   },
   {
     icon: coin_icon,
