@@ -20,15 +20,17 @@ const CategoryList = () => {
             </div>
 
         )}
-        {filteredProduct.length > 0  ? (
-            <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-6 lg:grid-cols-4 mt-6'>
-                {filteredProduct.map((product)=>(
-                    <ProductCard key={product._id} product={product}/>
-                ))}
+       
+      {filteredProduct.length > 0 ? (
+        <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 md:gap-6 lg:grid-cols-4 mt-6'>
+          {filteredProduct.map((product) => (
+            <ProductCard key={product._id} product= {product} />
+          ))}
             </div>
         ):(
          <div className='flex items-center justify-center h-[60vh]'>
-            <p className='text-2xl font-medium text-primary'>No Product Found in this Product List!</p>
+            <p className='text-2xl font-medium text-primary'>
+            No Product Found in this Product List! </p>
          </div>
         )}
 
