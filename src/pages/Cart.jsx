@@ -21,7 +21,7 @@ const Cart = () => {
         setCartArray(tempArray)
     }
 const placeOrder = async()=>{
-    
+
 }
 
     useEffect(()=>{
@@ -63,7 +63,8 @@ const placeOrder = async()=>{
                                     <p>weight: <span>{product.weight || "N/A"}</span></p>
                                     <div className='flex items-center'>
                                         <p>Qty:</p>
-                                        <select className='outline-none'>
+                                        <select onChange={e=>updateCartItem(product._id, Number(e.target.value))} 
+                                        value ={cartItems[product._id]}className='outline-none'>
                                             {Array(cartItems[product._id] > 9 ? cartItems[product._id] : 9 ).fill('').map((_, index) => (
                                                 <option key={index} value={index + 1}>{index + 1}</option>
                                             ))}
@@ -72,9 +73,9 @@ const placeOrder = async()=>{
                                 </div>
                             </div>
                         </div>
-                        <p className="text-center">${product.offerPrice * product.quantity}</p>
-                        <button onClick={()=>removeFromCart()} className="cursor-pointer mx-auto">
-                         <img src={assets.refresh_icon} alt="remove icon" className="inline-block w-6 h-6"/>
+                        <p className="text-center">Rs. {product.offerPrice * product.quantity}</p>
+                        <button onClick={()=>removeFromCart(product._id)} className="cursor-pointer mx-auto">
+                         <img src={assets.remove_icon} alt="remove icon" className="inline-block w-6 h-6"/>
                         </button>
                     </div>)
                 )}
@@ -94,12 +95,14 @@ const placeOrder = async()=>{
                     <p className="text-sm font-medium uppercase">Delivery Address</p>
                     <div className="relative flex justify-between items-start mt-2">
                         <p className="text-gray-500">{selectedAddress ? `${selectedAddress.street},${selectedAddress.city},${selectedAddress.state},${selectedAddress.country}`: "No address found"}</p>
-                        <button onClick={() => {selectedAddress(address); setShowAddress(!showAddress)}} className="text-indigo-500 hover:underline cursor-pointer">
+                        <button  onClick={() =>setShowAddress(!showAddress)}
+                        className="text-indigo-500 hover:underline cursor-pointer">
                             Change
                         </button>
                         {showAddress && (
                             <div className="absolute top-12 py-1 bg-white border border-gray-300 text-sm w-full">
-                              { address.map((address,index)=>(<p onClick={() => setShowAddress(false)} className="text-gray-500 p-2 hover:bg-gray-100">
+                              { address.map((address,index)=>(<p  key={index}
+                               onClick={() => setShowAddress(false)} className="text-gray-500 p-2 hover:bg-gray-100">
                                     {address.street},{address.state},{address.city},{address.country}
                                 </p>
                                 ))
@@ -123,16 +126,16 @@ const placeOrder = async()=>{
 
                 <div className="text-gray-500 mt-4 space-y-2">
                     <p className="flex justify-between">
-                        <span>Price</span><span>{currency}{getCartAmount()} </span>
+                        <span>Price</span><span>{currency} {getCartAmount()} </span>
                     </p>
                     <p className="flex justify-between">
                         <span>Shipping Fee</span><span className="text-green-600">Free</span>
                     </p>
                     <p className="flex justify-between">
-                        <span>Tax (2%)</span><span>{currency}{getCartAmount() * 2 / 100}</span>
+                        <span>Tax (2%)</span><span>{currency} {getCartAmount() * 2 / 100}</span>
                     </p>
                     <p className="flex justify-between text-lg font-medium mt-3">
-                        <span>Total Amount:</span><span>{currency}{getCartAmount() + getCartAmount() * 2 / 100}</span>
+                        <span>Total Amount:</span> <span>{currency} {getCartAmount() + getCartAmount() * 2 / 100}</span>
                     </p>
                 </div>
 
