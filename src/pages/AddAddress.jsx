@@ -30,7 +30,7 @@ const AddAddress = () => {
     const handlechange =(e)=>{
         const {name,value} = e.target;
         setAddress((prevAddress)=>({
-            ...AddAddress,
+            prevAddress,
             [name]:value,
         }))
 
@@ -63,7 +63,7 @@ const AddAddress = () => {
                      <InputField handlechange={handlechange} address={address} name='phone' type="text" placeholder='Phone' />
                      </div>
                      <div className='flex flex-col justify-center mt-10'>
-                        <button className='text-2xl font-semibold  border-red-400'>Submit</button>
+                        <button className="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-6 rounded-lg transition duration-300 ease-in-out w-full sm:w-auto text-center">Save Address</button>
                      </div>
                   
                     
