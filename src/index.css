@@ -12,3 +12,7 @@ font-family: "Outfit", sans-serif;
   --color-primary: #3893EE;
   --color-primary-dull: #6D60EF;
 }
+
+.no-scrollbar ::-webkit-scrollbar{
+  display: none;
+}
