@@ -32,7 +32,7 @@ const Navbar = () => {
 
       {/* Logo */}
       <NavLink to='/' onClick={() => setOpen(false)}>
-        <img className="h-9" src={assets.zlogo} alt="logo" />
+        <img className="w-20 h-20" src={assets.zlogo} alt="logo" />
       </NavLink>
 
       {/* Desktop Menu */}

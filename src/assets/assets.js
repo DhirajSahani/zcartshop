@@ -1,4 +1,6 @@
 import logo from "./logo.svg";
+import newlogo from "./newlogo.png";
+import bannerlogo from "./bannerlogo.png";
 import zlogo from "./zlogo.png";
 import search_icon from "./search_icon.svg";
 import remove_icon from "./remove_icon.svg";
@@ -72,6 +74,8 @@ import brown_rice_image from "./brown_rice_image.png";
 import barley_image from "./barley_image.png";
 
 export const assets = {
+  newlogo,
+  bannerlogo,
   zlogo,
   logo,
   search_icon,

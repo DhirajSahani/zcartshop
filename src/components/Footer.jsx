@@ -7,8 +7,8 @@ const Footer = () => {
         <div className="px-6 md:px-16 lg:px-24 xl:px-32 mt-24 bg-primary/10">
             <div className="flex flex-col md:flex-row items-start justify-between gap-10 py-10 border-b border-gray-500/30 text-gray-500">
                 <div>
-                    <img className="w-34 md:w-32" src={assets.zlogo} alt="logo" />
-                    <p className="max-w-[410px] mt-6">At ZCartShop, we're redefining your online shopping experience. From the latest tech gadgets to everyday essentials, we bring you a carefully curated selection of high-quality products at unbeatable prices. Our mission is to make shopping seamless, secure, and enjoyable for everyone.</p>
+                    <img className="w-34 md:w-30" src={assets.zlogo} alt="logo" />
+                    <p className="max-w-[410px] mt-2 m-2">At ZCartShop, we're redefining your online shopping experience. From the latest tech gadgets to everyday essentials, we bring you a carefully curated selection of high-quality products at unbeatable prices. Our mission is to make shopping seamless, secure, and enjoyable for everyone.</p>
                 </div>
                 <div className="flex flex-wrap justify-between w-full md:w-[45%] gap-5">
                     {footerLinks.map((section, index) => (
