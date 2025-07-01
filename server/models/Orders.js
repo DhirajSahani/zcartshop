@@ -15,6 +15,6 @@ const orderScheme = new mongoose.Schema({
     isPaid : {type : Boolean , required : true, default: false},      
 }, { timestamps:true })
 
-const Order = mongoose.models.order || monogoose.model('order', orderScheme)
+const Order = mongoose.models.order || mongoose.model('order', orderScheme)
 
 export default  Order;

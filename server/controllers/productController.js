@@ -1,74 +1,68 @@
-import { json } from "express"
-import { v2 as cloudinary } from "cloudinary"
-import Product from "../models/product"
 
-// Add product : /api/product/add
+
+import { v2 as cloudinary } from "cloudinary";
+import Product from "../models/product.js"; // ✅ Include .js if using ES Modules
+
+// ✅ Add Product : /api/product/add
 export const addProduct = async (req, res) => {
-
     try {
-        let prodcutData = json.parse(req.body.prodcutData)
+        // ✅ Parse the product data from req.body
+        let productData = JSON.parse(req.body.productData);
 
-        const images = req.file
+        // ✅ Get uploaded image files
+        const images = req.files;
 
+        // ✅ Upload all images to Cloudinary
         let imagesUrl = await Promise.all(
             images.map(async (item) => {
-                let result = await cloudinary.uploader.upload(item.path, { resource_type: 'image' });
-                return result.secure_url
+                let result = await cloudinary.uploader.upload(item.path, {
+                    resource_type: "image",
+                });
+                return result.secure_url;
             })
-        )
-        await Product.create({ ...prodcutData, image: imagesUrl })
+        );
 
-        res.json({ success: true, message: "product Added" })
+        // ✅ Save product in database
+        await Product.create({ ...productData, image: imagesUrl });
 
+        res.json({ success: true, message: "Product added" });
     } catch (error) {
         console.log(error.message);
-        res.json({ success: false, message: "error.message" })
-
+        res.json({ success: false, message: error.message });
     }
+};
 
-}
-
-// Get product : /api/product/list
-
+// ✅ Get all products : /api/product/list
 export const productList = async (req, res) => {
-
     try {
-        const products = await Product.find({})
-        res.json({ success: true, products })
+        const products = await Product.find({});
+        res.json({ success: true, products });
     } catch (error) {
         console.log(error.message);
-        res.json({ success: false, message: "error.message" })
+        res.json({ success: false, message: error.message });
     }
+};
 
-}
-
-// Get  single product : /api/product/id
-
+// ✅ Get single product by ID : /api/product/id
 export const productById = async (req, res) => {
-
     try {
         const { id } = req.body;
-        const product = await Product.findById(id)
-        res.json({ success: true, product })
+        const product = await Product.findById(id);
+        res.json({ success: true, product });
     } catch (error) {
         console.log(error.message);
-        res.json({ success: false, message: "error.message" })
+        res.json({ success: false, message: error.message });
     }
+};
 
-}
-
-// Change product inStock : /api/prodcut/Stock
-
+// ✅ Change product inStock : /api/product/stock
 export const changeStock = async (req, res) => {
     try {
-        const { id, inStock } = req.body
-        await Product.findByIdAndUpdate(id,{inStock})
-        res.json({success:true, message: "Stock Updated"})
-
-
+        const { id, inStock } = req.body;
+        await Product.findByIdAndUpdate(id, { inStock });
+        res.json({ success: true, message: "Stock updated" });
     } catch (error) {
-         console.log(error.message);
-        res.json({ success: false, message: "error.message" })
+        console.log(error.message);
+        res.json({ success: false, message: error.message });
     }
-
-}
+};
