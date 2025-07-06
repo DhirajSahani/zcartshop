@@ -3,6 +3,10 @@ import { children, createContext, useContext, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom";
 import { dummyProducts } from "../assets/assets";
 import toast from "react-hot-toast";
+import axios from "axios";
+
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = import.meta.env.VITE_BACKEND_URL;
 
 export const AppContext = createContext();
 export const AppContextProvider = ({ children }) => {
@@ -16,9 +20,49 @@ export const AppContextProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState({});
   const [searchQuery, setSearchQuery] = useState({});
 
+  // fetch seller Status
+
+  const fetchSeller = async()=>{
+    try {
+        const {data} = await axios.get('/api/seller/login');
+        if(data.success){
+          setIsSeller(true)
+        }else{
+          setIsSeller(false)
+        }
+    } catch (error) {
+       setIsSeller(false)
+    }
+  }
+
+  // fetch seller Auth Status, user Data and cart Items
+
+  const fetchUser = async()=>{
+    try {
+const {data} = await axios.get('api/user/is-auth');
+if(data.message){
+  setUser(data.user)
+  setCartItems(data.user.cartItems)
+}
+    } catch (error) {
+      setUser(null)
+      
+    }
+  }
+
   //Fetch all Products
   const fetchProduts = async () => {
-    setProducts(dummyProducts)
+    try {
+const {data} = await axios.get('/api/product/list')
+if(data.success){
+  setProducts(data.products)
+}
+else{
+  toast.error(data.message)
+}
+    } catch (error) {
+      toast.error(data.message)
+    }
   }
 
   //add products to cart
@@ -86,12 +130,36 @@ const getCartAmount = ()=>{
 }
 
   useEffect(() => {
+    fetchUser()
+    fetchSeller()
     fetchProduts()
   }, [])
 
+  // Update Data base Cart items
+  useEffect(()=> {
+    const updateCart = async()=>{
+      try {
+const {data} = await axios.post('api/user/update', {cartItems})
+  if(!data.success){
+    toast.error(data.message)
+  }
+
+      } catch (error) {
+        toast.error(error.message)
+        
+      }
+    }
+if(user){
+  updateCart()
+}
+
+  },[cartItems])
+
 
   const value = {
-    navigate, user, setUser, setIsSeller, isSeller, showUserLogin, setShowUserLogin, products, currency, addToCart, updateCartItem, removeFromCart, cartItems, searchQuery,setSearchQuery, getCartAmount, getCartCount
+    navigate, user, setUser, setIsSeller, isSeller, showUserLogin, setShowUserLogin, 
+    products, currency, addToCart, updateCartItem, removeFromCart, cartItems, 
+    searchQuery,setSearchQuery, getCartAmount, getCartCount , axios, fetchProduts
 
   }
 

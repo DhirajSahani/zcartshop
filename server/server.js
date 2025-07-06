@@ -27,7 +27,12 @@ const allowedOrigins = ['http://localhost:5173']
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin: allowedOrigins, Credential:true}));
+app.use(cors({
+  origin: 'http://localhost:5173',  // ✅ Allow frontend origin
+  credentials: true                 // ✅ Allow cookies/credentials
+}));
+
+// app.use(cors({origin: allowedOrigins, Credential:true}));
 
 // Mount the user Routes
 app.get('/', (req,res)=>res.send("API is Working"));
