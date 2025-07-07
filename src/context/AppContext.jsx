@@ -159,7 +159,7 @@ if(user){
   const value = {
     navigate, user, setUser, setIsSeller, isSeller, showUserLogin, setShowUserLogin, 
     products, currency, addToCart, updateCartItem, removeFromCart, cartItems, 
-    searchQuery,setSearchQuery, getCartAmount, getCartCount , axios, fetchProduts
+    searchQuery,setSearchQuery, getCartAmount, getCartCount , axios, fetchProduts,setCartItems
 
   }
 

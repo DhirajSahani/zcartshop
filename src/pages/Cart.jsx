@@ -4,7 +4,7 @@ import { assets, dummyAddress } from "../assets/assets"
 import toast from "react-hot-toast"
 
 const Cart = () => {
-    const {products,currency, cartItems, removeFromCart, getCartCount, updateCartItem, navigate ,getCartAmount,axios,user} = useAppContext()
+    const {products,currency, cartItems, removeFromCart, getCartCount, updateCartItem, navigate ,getCartAmount,axios,user,setCartItems} = useAppContext()
 
     const [cartArray, setCartArray] = useState([])
     const [address, setAddress] = useState([])
@@ -50,13 +50,20 @@ const placeOrder = async()=>{
             userId: user._id,
             items: cartArray.map(item=> ({product:item._id, quantity: item.quantity})),
             address: selectedAddress._id
-
-
         })
+
+        if(data.success){
+            toast.success(data.message)
+            setCartItems({})
+            navigate('/my-orders')
+
+        }else{
+            toast.error(data.message)
+        }
      }
 
     } catch (error) {
-        
+        toast.error(error.message)
     }
 
 }
