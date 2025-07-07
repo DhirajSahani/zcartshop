@@ -1,13 +1,11 @@
-import jwt from 'jsonwebtoken'
 
-// seller login: /api/seller/login
 import jwt from 'jsonwebtoken';
 
+// ✅ Seller Login: /api/seller/login
 export const sellerLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
 
-    // ✅ Correct comparison: email with EMAIL, password with PASSWORD
     if (
       email === process.env.SELLER_EMAIL &&
       password === process.env.SELLER_PASSWORD
@@ -28,35 +26,36 @@ export const sellerLogin = async (req, res) => {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
   } catch (error) {
-    console.log('Seller login error:', error.message);
-    return res.status(500).json({ success: false, message: 'Server error' });
+    console.log(error.message);
+    return res.status(500).json({ success: false, message:error.message });
   }
 };
 
-// Seller is-Auth :- /api/seller/is-auth
+
+// Seller isAuth : /api/seller/is-auth
 
 export const isSellerAuth = async (req, res) => {
   try {
-    // You can add validation here if needed, e.g., checking req.user or req.seller from middleware
     return res.status(200).json({ success: true });
   } catch (error) {
-    console.error("isSellerAuth error:", error.message);
-    return res.status(500).json({ success: false, message: "Internal Server Error" });
+    console.error(error.message);
+    return res.status(500).json({ success: false, message:error.message });
   }
 };
 
 
+ 
 // logout Seller: /api/seller/logout
 
 export const sellerlogout =  async (req,res)=>{
 try {
     res.clearCookie('sellerToken',{
         httpOnly: true,
-        secure:process.env.NODE_ENV === 'prodcution',
-        sameSite:process.env.NODE_ENV === 'prodcution' ? 'none' : 'strict',
+        secure:process.env.NODE_ENV === 'production',
+        sameSite:process.env.NODE_ENV === 'production' ? 'none' : 'strict',
 
     })
-    return res.json({success:true,message:"Logout"})
+    return res.json({success:true, message:"Logged out"})
 
 } catch (error) {
      console.log(error.message);

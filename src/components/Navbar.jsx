@@ -21,7 +21,7 @@ const Navbar = () => {
   const Logout = async () => {
     try {
       const { data } = await axios.get('api/user/logout')
-      if (data.message) {
+      if (data.success) {
         toast.success(data.message)
         setUser(null);
         navigate('/');

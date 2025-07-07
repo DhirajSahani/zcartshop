@@ -1,7 +1,6 @@
-import React from "react";
+
 import { children, createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { dummyProducts } from "../assets/assets";
 import toast from "react-hot-toast";
 import axios from "axios";
 
@@ -24,7 +23,7 @@ export const AppContextProvider = ({ children }) => {
 
   const fetchSeller = async()=>{
     try {
-        const {data} = await axios.get('/api/seller/login');
+        const {data} = await axios.get('/api/seller/is-auth');
         if(data.success){
           setIsSeller(true)
         }else{
@@ -36,19 +35,26 @@ export const AppContextProvider = ({ children }) => {
   }
 
   // fetch seller Auth Status, user Data and cart Items
+const fetchUser = async () => {
+  try {
+    const response = await axios.get('/api/user/is-auth');
+    const data = response.data;
 
-  const fetchUser = async()=>{
-    try {
-const {data} = await axios.get('api/user/is-auth');
-if(data.message){
-  setUser(data.user)
-  setCartItems(data.user.cartItems)
-}
-    } catch (error) {
-      setUser(null)
-      
+    if (data?.success && data?.user) {
+      setUser(data.user);
+      setCartItems(data.user.cartItems || []);
+    } else {
+      setUser(null);
     }
+
+  } catch (error) {
+    console.error("Fetch user failed:", error?.response?.data?.message || error.message);
+    setUser(null);
   }
+};
+
+
+
 
   //Fetch all Products
   const fetchProduts = async () => {

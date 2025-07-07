@@ -8,10 +8,10 @@ const SellerLogin = () => {
   const [password, setPassword] = useState('');
 
   const onsubmitHandler = async (event) => {
-    event.preventDefault(); // ✅ Moved this to the top
+    event.preventDefault(); 
     try {
-      const { data } = await axios.post('/api/seller/login', { email, password }); // ✅ fixed URL
-      if (data.success) {
+      const { data } = await axios.post('/api/seller/login', { email, password }); 
+      if(data.success) {
         setIsSeller(true);
         navigate('/seller');
       } else {
