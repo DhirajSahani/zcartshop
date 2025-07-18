@@ -1,35 +1,39 @@
 
 import jwt from 'jsonwebtoken';
 
-// ✅ Seller Login: /api/seller/login
-export const sellerLogin = async (req, res) => {
-  try {
-    const { email, password } = req.body;
+// ✅ login Seller : /api/seller/login
+import jwt from "jsonwebtoken";
 
-    if (
-      email === process.env.SELLER_EMAIL &&
-      password === process.env.SELLER_PASSWORD
-    ) {
-      const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-        expiresIn: '7d',
-      });
+export const sellerLogin = (req, res) => {
+  const { email, password } = req.body;
 
-      res.cookie('sellerToken', token, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
-        maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      });
+  // Check if credentials are present
+  if (!email || !password) {
+    return res.status(400).json({ success: false, message: "Email and password are required" });
+  }
 
-      return res.status(200).json({ success: true, message: 'Logged in' });
-    } else {
-      return res.status(401).json({ success: false, message: 'Invalid credentials' });
-    }
-  } catch (error) {
-    console.log(error.message);
-    return res.status(500).json({ success: false, message:error.message });
+  // Match with environment (or DB)
+  if (
+    email === process.env.SELLER_EMAIL &&
+    password === process.env.SELLER_PASSWORD
+  ) {
+    // Generate token
+    const token = jwt.sign({ email }, process.env.JWT_SECRET, { expiresIn: "1d" });
+
+    // Set cookie
+    res.cookie("sellerToken", token, {
+      httpOnly: true,
+      secure: false, // set to true in production (https)
+      sameSite: "Lax",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
+
+    return res.json({ success: true, message: "Login successful" });
+  } else {
+    return res.status(401).json({ success: false, message: "Invalid seller credentials" });
   }
 };
+
 
 
 // Seller isAuth : /api/seller/is-auth
@@ -47,7 +51,7 @@ export const isSellerAuth = async (req, res) => {
  
 // logout Seller: /api/seller/logout
 
-export const sellerlogout =  async (req,res)=>{
+export const sellerLogout =  async (req,res)=>{
 try {
     res.clearCookie('sellerToken',{
         httpOnly: true,

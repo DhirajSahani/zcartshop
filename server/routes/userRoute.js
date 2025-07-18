@@ -1,11 +1,11 @@
 import express from 'express';
 import { login, isAuth, logout, register } from '../controllers/userController.js';
 
-const userRoute = express.Router();
+const userRouter = express.Router();
 
-userRoute.post('/register', register);
-userRoute.post('/login', login);
-userRoute.get('/is-auth', isAuth);
-userRoute.get('/logout', logout);
+userRouter.post('/register', register);
+userRouter.post('/login', login);
+userRouter.get('/is-auth', isAuth);
+userRouter.get('/logout', logout);
 
-export default userRoute;
+export default userRouter;

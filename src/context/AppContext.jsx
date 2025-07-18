@@ -1,4 +1,3 @@
-
 import { children, createContext, useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
@@ -35,24 +34,23 @@ export const AppContextProvider = ({ children }) => {
   }
 
   // fetch seller Auth Status, user Data and cart Items
+
 const fetchUser = async () => {
   try {
-    const response = await axios.get('/api/user/is-auth');
-    const data = response.data;
-
-    if (data?.success && data?.user) {
+    const { data } = await axios.get('/api/user/is-auth');
+    if (data.success && data.user) {
       setUser(data.user);
-      setCartItems(data.user.cartItems || []);
+      setCartItems(data.user.cartItems || {});
+      localStorage.setItem("user", JSON.stringify(data.user)); // 👈 cache
     } else {
       setUser(null);
+      localStorage.removeItem("user");
     }
-
   } catch (error) {
-    console.error("Fetch user failed:", error?.response?.data?.message || error.message);
     setUser(null);
+    localStorage.removeItem("user");
   }
 };
-
 
 
 
@@ -136,6 +134,10 @@ const getCartAmount = ()=>{
 }
 
   useEffect(() => {
+      const cachedUser = localStorage.getItem("user");
+  if (cachedUser) {
+    setUser(JSON.parse(cachedUser));
+  }
     fetchUser()
     fetchSeller()
     fetchProduts()

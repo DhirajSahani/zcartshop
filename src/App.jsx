@@ -1,4 +1,4 @@
-
+import { useEffect } from 'react';
 import Navbar from './components/Navbar'
 import { Route, Router, Routes, useLocation } from 'react-router-dom'
 import Home from './pages/Home'
@@ -18,13 +18,10 @@ import AddProduct from './pages/seller/AddProduct'
 import ProductList from './pages/seller/ProductList'
 import Orders from './pages/seller/Orders'
 
-
-
-
 const App = () => {
-
   const isSellerPath = useLocation().pathname.includes("seller");
   const { showUserLogin, isSeller} = useAppContext()
+
   return (
     <div className='text-defult min-h-screen text-gray-700 bg-white'>
       {isSellerPath ? null : <Navbar />}

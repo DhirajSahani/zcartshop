@@ -11,27 +11,25 @@ const Login = () => {
   const [password, setPassword] = React.useState("");
 
 const onSubmitHandler = async (event) => {
-  event.preventDefault();
+    event.preventDefault();
   try {
-    const endpoint = state === "login" ? "/api/user/login" : "/api/user/register";
-    
-    const payload = state === "login"
-      ? { email, password }
-      : { name, email, password };
+    const endpoint = `/api/user/${state}`; // 'login' or 'register'
+    const payload = { name, email, password };
 
-    const { data } = await axios.post(endpoint, payload);
+    const { data } = await axios.post(endpoint, payload); // ✅ Use POST
 
-    if (data.success && data.user) {
+    if (data.success) {
       setUser(data.user);
-      navigate("/");
+      navigate('/');
       setShowUserLogin(false);
     } else {
-      toast.error(data.message || "Login/Register failed");
+      toast.error(data.message);
     }
   } catch (error) {
     toast.error(error.response?.data?.message || error.message);
   }
 };
+
 
 
   return (

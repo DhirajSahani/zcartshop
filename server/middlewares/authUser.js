@@ -1,8 +1,7 @@
 import jwt from "jsonwebtoken";
-
 const authUser = async (req, res, next) => {
   try {
-    const { token } = req.cookies;
+    const { token } = res.cookies;
 
     if (!token) {
       return res.status(401).json({ success: false, message: "Not Authorized. Token missing." });
@@ -14,8 +13,8 @@ const authUser = async (req, res, next) => {
       return res.status(401).json({ success: false, message: "Not Authorized. Invalid token." });
     }
 
-    req.userId = tokenDecode.id; // ✅ Attach to req (NOT req.body)
-    next(); // ✅ Move to controller
+    req.userId = tokenDecode.id; // Attach decoded user ID to request
+    next();
   } catch (error) {
     return res.status(401).json({
       success: false,

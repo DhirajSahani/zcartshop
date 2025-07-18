@@ -1,33 +1,28 @@
-import jwt from 'jsonwebtoken'
+import jwt from 'jsonwebtoken';
 
-const authSeller = async (req,res)=>{
-    const {sellerToken} = req.cookies;
-    if(!sellerToken){
-        return res.json({success: false,  message:" Not Authorized"})
+const authSeller = async (req, res, next) => {
+  const { sellerToken } = req.cookies;
+
+  if (!sellerToken) {
+    return res.status(401).json({ success: false, message: "Not Authorized. No token." });
+  }
+
+  try {
+    const tokenDecode = jwt.verify(sellerToken, process.env.JWT_SECRET);
+
+    if (tokenDecode.email === process.env.SELLER_EMAIL) {
+      next(); // ✅ only call next if authorized
+    } else {
+      return res.status(401).json({ success: false, message: "Not Authorized. Invalid email." });
     }
-      try {
-        const { sellerToken } = req.cookies;
-    
-        if (!sellerToken) {
-          return res.status(401).json({ success: false, message: "Not Authorized. Token missing." });
-        }
-    
-        const tokenDecode = jwt.verify(sellerToken, process.env.JWT_SECRET);
-    
-        if (tokenDecode.email === process.env.SELLER_EMAIL) {
-         next();
-        }else{
-             return res.status(401).json({ success: false, message: "Not Authorized. Invalid token." });
-        }
-    
-     
-      } catch (error) {
-        return res.status(401).json({
-          success: false,
-          message: "Token verification failed",
-          error: error.message,
-        });
-      }
-}
 
-export default authSeller
+  } catch (error) {
+    return res.status(401).json({
+      success: false,
+      message: "Token verification failed",
+      error: error.message,
+    });
+  }
+};
+
+export default authSeller;
