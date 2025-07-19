@@ -1,9 +1,9 @@
 
 import jwt from 'jsonwebtoken';
 
-// ✅ login Seller : /api/seller/login
-import jwt from "jsonwebtoken";
 
+
+// ✅ login Seller : /api/seller/login
 export const sellerLogin = (req, res) => {
   const { email, password } = req.body;
 

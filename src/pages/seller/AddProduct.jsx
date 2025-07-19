@@ -9,7 +9,7 @@ const AddProduct = () => {
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [price, setPrice] = useState('');
-  const [offerprice, setOfferPrice] = useState('');
+  const [offerPrice, setOfferPrice] = useState('');
 
   const { axios } = useAppContext();
 
@@ -23,7 +23,7 @@ const AddProduct = () => {
         description: description.split('\n'),
         category,
         price,
-        offerprice,
+        offerPrice,
       };
 
       const formData = new FormData();
@@ -139,7 +139,7 @@ const AddProduct = () => {
             <label className="text-base font-medium" htmlFor="offer-price">Offer Price</label>
             <input
               onChange={(e) => setOfferPrice(e.target.value)}
-              value={offerprice}
+              value={offerPrice}
               id="offer-price"
               type="number"
               placeholder="0"

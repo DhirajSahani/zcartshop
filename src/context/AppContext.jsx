@@ -38,21 +38,29 @@ export const AppContextProvider = ({ children }) => {
 const fetchUser = async () => {
   try {
     const { data } = await axios.get('/api/user/is-auth');
-    if (data.success && data.user) {
+
+    if (data.success && data.user && typeof data.user === 'object') {
       setUser(data.user);
       setCartItems(data.user.cartItems || {});
-      localStorage.setItem("user", JSON.stringify(data.user)); // 👈 cache
+      localStorage.setItem("user", JSON.stringify(data.user));
     } else {
       setUser(null);
+      setCartItems({});
       localStorage.removeItem("user");
     }
-  } catch (error) {
-    setUser(null);
+
+ } catch (error) {
+  console.error("Fetch user failed:", error?.response?.data?.message || error.message);
+  setUser(null);
+  setCartItems({});
+  try {
     localStorage.removeItem("user");
+  } catch (storageError) {
+    console.error("Failed to clear user from localStorage:", storageError);
   }
+}
+
 };
-
-
 
   //Fetch all Products
   const fetchProduts = async () => {
@@ -158,10 +166,10 @@ const {data} = await axios.post('api/user/update', {cartItems})
       }
     }
 if(user){
-  updateCart()
+  updateCart();
 }
 
-  },[cartItems])
+  },[cartItems,user]);
 
 
   const value = {
