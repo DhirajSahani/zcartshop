@@ -1,5 +1,5 @@
 import { children, createContext, useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { data, useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import axios from "axios";
 
@@ -20,8 +20,9 @@ export const AppContextProvider = ({ children }) => {
 
   // fetch seller Status
 
-  const fetchSeller = async()=>{
+  const fetchSeller = async(event)=>{
     try {
+      event.preventDefault();
         const {data} = await axios.get('/api/seller/is-auth');
         if(data.success){
           setIsSeller(true)
@@ -36,9 +37,9 @@ export const AppContextProvider = ({ children }) => {
   // fetch seller Auth Status, user Data and cart Items
 
 const fetchUser = async () => {
+   
   try {
     const { data } = await axios.get('/api/user/is-auth');
-
     if (data.success && data.user && typeof data.user === 'object') {
       setUser(data.user);
       setCartItems(data.user.cartItems || {});
@@ -50,14 +51,9 @@ const fetchUser = async () => {
     }
 
  } catch (error) {
-  console.error("Fetch user failed:", error?.response?.data?.message || error.message);
+  toast.error(error.message);
   setUser(null);
   setCartItems({});
-  try {
-    localStorage.removeItem("user");
-  } catch (storageError) {
-    console.error("Failed to clear user from localStorage:", storageError);
-  }
 }
 
 };
@@ -146,30 +142,29 @@ const getCartAmount = ()=>{
   if (cachedUser) {
     setUser(JSON.parse(cachedUser));
   }
-    fetchUser()
-    fetchSeller()
-    fetchProduts()
+    fetchUser();
+    fetchSeller();
+    fetchProduts();
   }, [])
 
-  // Update Data base Cart items
-  useEffect(()=> {
-    const updateCart = async()=>{
-      try {
-const {data} = await axios.post('api/user/update', {cartItems})
-  if(!data.success){
-    toast.error(data.message)
-  }
-
-      } catch (error) {
-        toast.error(error.message)
-        
+// Update database with cart items whenever cartItems or user changes
+useEffect(() => {
+  const updateCart = async () => {
+    try {
+      const { data } = await axios.post('/api/user/update', { cartItems });
+      if (!data.success) {
+        toast.error(data.message || "Failed to update cart");
       }
+    } catch (error) {
+      toast.error(error.response?.data?.message || error.message || "Update cart failed");
     }
-if(user){
-  updateCart();
-}
+  };
 
-  },[cartItems,user]);
+  if (user && Object.keys(cartItems).length > 0) {
+    updateCart();
+  }
+}, [cartItems, user]);
+
 
 
   const value = {
